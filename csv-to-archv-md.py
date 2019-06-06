@@ -40,28 +40,29 @@ for row_index, row in enumerate(datareader):
 		md_tags = ""
 		# taxonomy_header = "taxonomy: " + "\n"
 
-		# for cell_index, cell in enumerate(row[:5]):
+		# can we do this with an if statement
+		
+
+		for cell_index, cell in enumerate(row[:5]):
 			# cell_index = row number
 			# cell_heading = column header in csv
 			
 
-			# cell_heading = data_headings[cell_index].lower().replace(" ", "_").replace("-", "")
-			# cell_text = cell_heading + ": " + "\"" + cell.replace("\n", ", ") + "\"" + "\n" 
+			cell_heading = data_headings[cell_index].lower().replace(" ", "_").replace("-", "")
+			cell_text = cell_heading + ": " + "\"" + cell.replace("\n", ", ") + "\"" + "\n" 
 
-			# md_frontmatter += cell_text
+			md_frontmatter += cell_text
 
 			# print(cell_text)
 
-		for cell_index, cell in enumerate(datareader):
-
-			if row_index == 6:
+		for cell_index, cell in enumerate(row[6:]):
 			# print(cell)
 			
-				cell_heading = data_headings[cell_index].lower().replace(" ", "_").replace("-", "")
-				taxonomy_text = cell_heading + ": " + "[" + cell.replace("\n", ", ") + "]" + "\n"
+			cell_heading = data_headings[cell_index].lower().replace(" ", "_").replace("-", "")
+			taxonomy_text = cell_heading + ": " + "[" + cell.replace("\n", ", ") + "]" + "\n"
 
-				# md_frontmatter += taxonomy_text
-				md_tags += taxonomy_text
+			# md_frontmatter += taxonomy_text
+			md_tags += taxonomy_text
 
-		new_md.write(meta_separator + "\n" + md_tags + meta_separator +"\n")
+		new_md.write(meta_separator + "\n" + md_frontmatter + meta_separator +"\n")
 		new_md.close()
