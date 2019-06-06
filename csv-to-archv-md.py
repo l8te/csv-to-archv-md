@@ -29,30 +29,39 @@ for row_index, row in enumerate(datareader):
 		if row_index > 0:
 			# print(row[1])
 			# change this integer to change what column the file name is based on
-			fname = row[1]
+			fname = row[3]
 
-		filename = str(fname) + '.jpg.meta.yaml'
-		new_yaml = open(filename, 'w')
+		filename = str(fname).replace(".jpg", "") + '.md'
+		new_md = open(filename, 'w')
+		meta_separator = str("---")
 
 		# Empty string that we will fill with yaml formatted text based on data extracted from our CSV.
-		yaml_frontmatter = ""
-		grav_tags = ""
-		taxonomy_header = "taxonomy: " + "\n"
+		md_frontmatter = ""
+		md_tags = ""
+		# taxonomy_header = "taxonomy: " + "\n"
 
-		for cell_index, cell in enumerate(row[:4]):
+		# for cell_index, cell in enumerate(row[:5]):
+			# cell_index = row number
+			# cell_heading = column header in csv
+			
 
-			cell_heading = data_headings[cell_index].lower().replace(" ", "_").replace("-", "")
-			cell_text = cell_heading + ": " + cell.replace("\n", ", ") + "\n"
+			# cell_heading = data_headings[cell_index].lower().replace(" ", "_").replace("-", "")
+			# cell_text = cell_heading + ": " + "\"" + cell.replace("\n", ", ") + "\"" + "\n" 
 
-			yaml_frontmatter += cell_text
+			# md_frontmatter += cell_text
 
-		for cell_index, cell in enumerate(row[+5:]):
+			# print(cell_text)
+
+		for cell_index, cell in enumerate(datareader):
+
+			if row_index == 6:
 			# print(cell)
 			
-			cell_heading = data_headings[cell_index].lower().replace(" ", "_").replace("-", "")
-			taxonomy_text = "\t" + cell_heading + ": " + cell.replace("\n", ", ") + "\n"
+				cell_heading = data_headings[cell_index].lower().replace(" ", "_").replace("-", "")
+				taxonomy_text = cell_heading + ": " + "[" + cell.replace("\n", ", ") + "]" + "\n"
 
-			grav_tags += taxonomy_text
+				# md_frontmatter += taxonomy_text
+				md_tags += taxonomy_text
 
-		new_yaml.write(yaml_frontmatter + taxonomy_header + grav_tags)
-		new_yaml.close()
+		new_md.write(meta_separator + "\n" + md_tags + meta_separator +"\n")
+		new_md.close()
