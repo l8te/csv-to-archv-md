@@ -27,7 +27,7 @@ for row_index, row in enumerate(datareader):
 		# Open a new file with filename based on the correct column from the CSV
 
 		if row_index > 0:
-			# print(row[1])
+			# print(row)
 			# change this integer to change what column the file name is based on
 			fname = row[3]
 
@@ -38,31 +38,55 @@ for row_index, row in enumerate(datareader):
 		# Empty string that we will fill with yaml formatted text based on data extracted from our CSV.
 		md_frontmatter = ""
 		md_tags = ""
-		# taxonomy_header = "taxonomy: " + "\n"
-
+		md_descript = ""
 		# can we do this with an if statement
 		
 
-		for cell_index, cell in enumerate(row[:5]):
+		for cell_index, cell in enumerate(row):
 			# cell_index = row number
 			# cell_heading = column header in csv
-			
 
-			cell_heading = data_headings[cell_index].lower().replace(" ", "_").replace("-", "")
-			cell_text = cell_heading + ": " + "\"" + cell.replace("\n", ", ") + "\"" + "\n" 
+			if cell_index < 5: 
 
-			md_frontmatter += cell_text
+				cell_heading = data_headings[cell_index].lower().replace(" ", "_").replace("-", "")
+				cell_text = cell_heading + ": " + "\"" + cell.replace("\n", ", ") + "\"" + "\n" 
+
+				md_frontmatter += cell_text
+
+			elif cell_index == 5:
+
+				cell_heading = data_headings[cell_index].lower().replace(" ", "_").replace("-", "")
+
+				tags_text = cell.split(",")
+
+				# tags should be formatted as ['thing1', 'thing2'] - split(",")
+				cell_text = cell_heading + ": " + "\"" + cell.replace("\n", ", ") + "\"" + "\n" 
+
+				md_tags += cell_text
+
+				print(tags_text)
+
+			elif cell_index == 6:
+
+				# cell_heading = data_headings[cell_index].lower().replace(" ", "_").replace("-", "")
+				cell_text = cell.replace("\n", ", ") + "\n" 
+
+				md_descript += cell_text
+
+
+
+				# print("did it work?")
 
 			# print(cell_text)
 
-		for cell_index, cell in enumerate(row[6:]):
+		# for cell_index, cell in enumerate(row[6:]):
 			# print(cell)
 			
-			cell_heading = data_headings[cell_index].lower().replace(" ", "_").replace("-", "")
-			taxonomy_text = cell_heading + ": " + "[" + cell.replace("\n", ", ") + "]" + "\n"
+			# cell_heading = data_headings[cell_index].lower().replace(" ", "_").replace("-", "")
+			# taxonomy_text = cell_heading + ": " + "[" + cell.replace("\n", ", ") + "]" + "\n"
 
 			# md_frontmatter += taxonomy_text
-			md_tags += taxonomy_text
+			# md_tags += taxonomy_text
 
-		new_md.write(meta_separator + "\n" + md_frontmatter + meta_separator +"\n")
+		new_md.write(meta_separator + "\n" + md_frontmatter + md_tags + meta_separator +"\n" + md_descript)
 		new_md.close()
